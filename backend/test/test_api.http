@@ -1,0 +1,94 @@
+### Threat Intelligence Platform — API Tests
+### Use with VS Code "REST Client" extension (Ctrl+Click "Send Request")
+
+@baseUrl = http://localhost:8000
+
+# ─────────────────────────────────────────────
+# Health check
+# ─────────────────────────────────────────────
+
+### Health
+GET {{baseUrl}}/health
+
+
+# ─────────────────────────────────────────────
+# IOC Lookup — single
+# ─────────────────────────────────────────────
+
+### Known malicious IP (common test value)
+POST {{baseUrl}}/api/ioc/lookup
+Content-Type: application/json
+
+{
+  "value": "45.33.32.156"
+}
+
+###  Clean IP (Google DNS)
+POST {{baseUrl}}/api/ioc/lookup
+Content-Type: application/json
+
+{
+  "value": "8.8.8.8"
+}
+
+### Domain lookup
+POST {{baseUrl}}/api/ioc/lookup
+Content-Type: application/json
+
+{
+  "value": "google.com"
+}
+
+### Known malicious domain
+POST {{baseUrl}}/api/ioc/lookup
+Content-Type: application/json
+
+{
+  "value": "malware.wicar.org"
+}
+
+### SHA256 hash lookup (EICAR test file hash)
+POST {{baseUrl}}/api/ioc/lookup
+Content-Type: application/json
+
+{
+  "value": "275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f"
+}
+
+### Invalid IOC — should return 422 validation error
+POST {{baseUrl}}/api/ioc/lookup
+Content-Type: application/json
+
+{
+  "value": "not-valid-anything"
+}
+
+
+# ─────────────────────────────────────────────
+# IOC Lookup — bulk (max 10)
+# ─────────────────────────────────────────────
+
+### Bulk lookup — mixed IP + domain
+POST {{baseUrl}}/api/ioc/bulk
+Content-Type: application/json
+
+{
+  "values": [
+    "8.8.8.8",
+    "1.1.1.1",
+    "185.220.101.1",
+    "google.com"
+  ]
+}
+
+### Bulk — too many items (should return 422)
+POST {{baseUrl}}/api/ioc/bulk
+Content-Type: application/json
+
+{
+  "values": [
+    "1.1.1.1", "2.2.2.2", "3.3.3.3", "4.4.4.4",
+    "5.5.5.5", "6.6.6.6", "7.7.7.7", "8.8.8.8",
+    "9.9.9.9", "10.10.10.10", "11.11.11.11"
+  ]
+}
