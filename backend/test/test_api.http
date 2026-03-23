@@ -28,7 +28,7 @@ POST {{baseUrl}}/api/ioc/lookup
 Content-Type: application/json
 
 {
-  "value": "8.8.8.8"
+  "value": "45.33.32.156"
 }
 
 ### Domain lookup

@@ -1,0 +1,104 @@
+### ML Scoring API Tests
+### Use with VS Code REST Client extension
+
+@baseUrl = http://localhost:8000
+
+# ─────────────────────────────────────────────
+# Status — check if models are loaded
+# ─────────────────────────────────────────────
+
+### Check ML status (run this first)
+GET {{baseUrl}}/api/ml/status
+
+### Get expected feature names
+GET {{baseUrl}}/api/ml/features
+
+
+# ─────────────────────────────────────────────
+# Score a flow — normal traffic profile
+# ─────────────────────────────────────────────
+
+### Score: typical benign HTTP traffic
+POST {{baseUrl}}/api/ml/score
+Content-Type: application/json
+
+{
+  "features": {
+    "flow_duration": 1000000,
+    "total_fwd_packets": 10,
+    "total_backward_packets": 8,
+    "total_length_of_fwd_packets": 5000,
+    "total_length_of_bwd_packets": 4000,
+    "flow_bytes_per_s": 9000,
+    "flow_packets_per_s": 18,
+    "flow_iat_mean": 55000,
+    "flow_iat_std": 12000,
+    "syn_flag_count": 1,
+    "ack_flag_count": 17,
+    "fin_flag_count": 1,
+    "psh_flag_count": 4,
+    "fwd_packet_length_mean": 500,
+    "bwd_packet_length_mean": 500,
+    "init_win_bytes_forward": 65535,
+    "init_win_bytes_backward": 65535
+  }
+}
+
+
+# ─────────────────────────────────────────────
+# Score a flow — DDoS-like profile
+# ─────────────────────────────────────────────
+
+### Score: DDoS-like traffic (high packet rate, tiny packets, no ACK)
+POST {{baseUrl}}/api/ml/score
+Content-Type: application/json
+
+{
+  "features": {
+    "flow_duration": 1000,
+    "total_fwd_packets": 50000,
+    "total_backward_packets": 0,
+    "total_length_of_fwd_packets": 3000000,
+    "total_length_of_bwd_packets": 0,
+    "flow_bytes_per_s": 3000000000,
+    "flow_packets_per_s": 50000000,
+    "flow_iat_mean": 20,
+    "flow_iat_std": 5,
+    "syn_flag_count": 50000,
+    "ack_flag_count": 0,
+    "fin_flag_count": 0,
+    "psh_flag_count": 0,
+    "fwd_packet_length_mean": 60,
+    "bwd_packet_length_mean": 0,
+    "init_win_bytes_forward": 1024,
+    "init_win_bytes_backward": 0
+  }
+}
+
+
+# ─────────────────────────────────────────────
+# Batch scoring
+# ─────────────────────────────────────────────
+
+### Batch: score two flows at once
+POST {{baseUrl}}/api/ml/score/batch
+Content-Type: application/json
+
+{
+  "flows": [
+    {
+      "flow_duration": 1000000,
+      "total_fwd_packets": 10,
+      "flow_bytes_per_s": 9000,
+      "syn_flag_count": 1,
+      "ack_flag_count": 17
+    },
+    {
+      "flow_duration": 1000,
+      "total_fwd_packets": 50000,
+      "flow_bytes_per_s": 3000000000,
+      "syn_flag_count": 50000,
+      "ack_flag_count": 0
+    }
+  ]
+}

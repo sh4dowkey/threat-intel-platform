@@ -5,9 +5,12 @@ from contextlib import asynccontextmanager
 from app.core.database import engine, Base
 from app.core.redis import close_redis
 from app.api.ioc import router as ioc_router
+from app.api.ml import router as ml_router
+from app.api.alerts import router as alerts_router
+import app.models.alert  # noqa: F401
 import app.models.ioc  # noqa — registers table with SQLAlchemy
 
-
+#startup and shutdown logic
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
@@ -32,6 +35,10 @@ app.add_middleware(
 )
 
 app.include_router(ioc_router)
+
+app.include_router(ml_router)
+
+app.include_router(alerts_router)
 
 
 @app.get("/health")
