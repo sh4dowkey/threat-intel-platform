@@ -19,7 +19,7 @@ COPY app/ ./app/
 
 # Copy ML models (must be present at build time)
 # These are copied from ml/models/ into the image
-COPY models/ ./models/
+COPY backend/models/ ./models/
 
 # Non-root user for security
 RUN adduser --disabled-password --gecos "" appuser && \
