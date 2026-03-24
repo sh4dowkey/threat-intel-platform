@@ -34,7 +34,7 @@
 
 ## Overview
 
-The Threat Intelligence Platform (TIP) is a production-grade, open-source SOC assistant built as a final-year cybersecurity project. It combines classical machine learning, modern LLMs, and real-time threat intel APIs to give security analysts an end-to-end workflow for detecting, understanding, and triaging network threats — all from a single dashboard.
+The Threat Intelligence Platform (TIP) is a production-grade, open-source SOC assistant. It combines classical machine learning, modern LLMs, and real-time threat intel APIs to give security analysts an end-to-end workflow for detecting, understanding, and triaging network threats — all from a single dashboard.
 
 **The core problem it solves:** Traditional IDS tools generate thousands of raw alerts with no context. Analysts spend 70% of their time manually researching what each alert means and what to do about it. TIP automates that entire process — it not only detects the threat but explains it in plain English, maps it to the MITRE ATT&CK framework, and tells the analyst exactly what to do next.
 
@@ -97,19 +97,19 @@ The Threat Intelligence Platform (TIP) is a production-grade, open-source SOC as
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                        React Frontend                           │
-│   Dashboard · Alerts · Alert Detail · IOC Lookup · Analyze     │
+│   Dashboard · Alerts · Alert Detail · IOC Lookup · Analyze      │
 └───────────────────────────┬─────────────────────────────────────┘
                             │ HTTP / REST
 ┌───────────────────────────▼─────────────────────────────────────┐
 │                      FastAPI Backend                            │
 │                                                                 │
-│  ┌─────────────┐  ┌──────────────┐  ┌────────────────────────┐ │
-│  │  /api/ioc   │  │  /api/alerts │  │      /api/ml           │ │
-│  │  Enrichment │  │  CRUD + Triage│  │  Score / Status        │ │
-│  └──────┬──────┘  └──────┬───────┘  └──────────┬─────────────┘ │
-│         │                │                      │               │
-│  ┌──────▼──────────────────▼──────────────────────▼───────────┐ │
-│  │                   Service Layer                             │ │
+│  ┌─────────────┐  ┌──────────────┐  ┌────────────────────────┐  │
+│  │  /api/ioc   │  │  /api/alerts │  │      /api/ml           │  │
+│  │  Enrichment │  │ CRUD + Triage│  │  Score / Status        │  │
+│  └──────┬──────┘  └──────┬───────┘  └──────────┬─────────────┘  │
+│         │                │                     │                │
+│  ┌──────▼────────────────▼─────────────────────▼──────────────┐ │
+│  │                   Service Layer                            │ │
 │  │  ┌────────────┐  ┌────────────┐  ┌──────────────────────┐  │ │
 │  │  │VirusTotal  │  │  ML Service│  │    Groq LLM Service  │  │ │
 │  │  │AbuseIPDB   │  │IsoForest + │  │ Alert Explanation +  │  │ │
@@ -118,15 +118,15 @@ The Threat Intelligence Platform (TIP) is a production-grade, open-source SOC as
 │  └─────────┼──────────────┼────────────────────┼──────────────┘ │
 └────────────┼──────────────┼────────────────────┼────────────────┘
              │              │                    │
-    ┌────────▼──────┐  ┌────▼────────┐  ┌───────▼──────────┐
+    ┌────────▼──────┐  ┌────▼────────┐  ┌────────▼─────────┐
     │  Rate Limiter │  │  ML Models  │  │   Redis Cache    │
     │  (Redis SSets)│  │  .pkl files │  │  LLM + IOC + RL  │
     └────────┬──────┘  └─────────────┘  └──────────────────┘
              │
     ┌────────▼──────────────────────────────────┐
-    │              PostgreSQL (Supabase)         │
+    │              PostgreSQL (Supabase)        │
     │         ioc_records · alerts tables       │
-    └────────────────────────────────────────────┘
+    └───────────────────────────────────────────┘
 ```
 
 ### Component Responsibilities
