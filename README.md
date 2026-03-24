@@ -161,7 +161,7 @@ The Threat Intelligence Platform (TIP) is a production-grade, open-source SOC as
 ### 1. Clone and configure
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/threat-intel-platform.git
+git clone https://github.com/sh4dowkey/threat-intel-platform.git
 cd threat-intel-platform
 ```
 
