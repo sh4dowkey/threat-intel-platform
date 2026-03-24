@@ -18,8 +18,6 @@ import pandas as pd
 from dataclasses import dataclass, field
 from typing import Optional
 
-MODELS_DIR = "/mnt/e/Projects/threat-intel-platform/ml/models"
-
 
 @dataclass
 class MLPrediction:
@@ -50,7 +48,11 @@ class MLService:
         self._feature_columns: list[str] = []
         self._label_map: dict = {}          # name → index
         self._reverse_label_map: dict = {}  # index → name
-        self._models_dir = MODELS_DIR
+        
+    @property
+    def _models_dir(self) -> str:
+        from app.core.config import get_settings
+        return get_settings().models_dir
 
     def _load(self):
         """Load all model artifacts. Called once on first inference request."""
