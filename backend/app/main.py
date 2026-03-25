@@ -30,7 +30,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
     "http://localhost:5173",
-    "https://threat-intel-platform.vercel.app/",],
+    "https://threat-intel-platform.vercel.app",
+    "https://threat-intel-platform-production.up.railway.app",],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
